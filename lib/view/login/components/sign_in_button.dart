@@ -8,16 +8,21 @@ class SignInButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 20),
+      padding: const EdgeInsets.only(top: 40, bottom: 20),
       child: FilledButton(
-        style: const ButtonStyle(
-          backgroundColor: WidgetStatePropertyAll(Colors.black),
+        style: ButtonStyle(
+          backgroundColor: const WidgetStatePropertyAll(Colors.black),
+          shape: WidgetStatePropertyAll(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            )
+          )
         ),
         onPressed: onSignInPressed,
-        child: Container(
+        child: const SizedBox(
           width: double.infinity,
           height: 60,
-          child: const Center(
+          child: Center(
               child: Text(
                 "Sign In",
                 style: TextStyle(
