@@ -3,7 +3,7 @@ import 'package:cash_flow/repositories/db_repository.dart';
 import 'package:cash_flow/source/local/database.dart';
 import 'package:get/get.dart';
 
-class MainBinding extends Bindings {
+class MainBindings extends Bindings {
   @override
   void dependencies() {
     Get.put(AppDatabase());
