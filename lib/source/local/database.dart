@@ -15,6 +15,7 @@ class CashFlow extends Table {
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
+  @override
   int get schemaVersion => 1;
 
   static QueryExecutor _openConnection() {
