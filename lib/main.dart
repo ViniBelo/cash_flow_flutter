@@ -1,5 +1,6 @@
 import 'package:cash_flow/bindings/main_bindings.dart';
 import 'package:cash_flow/config/routes.dart';
+import 'package:cash_flow/screens/cash_flow/form_screen.dart';
 import 'package:cash_flow/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -28,6 +29,11 @@ class MyApp extends StatelessWidget {
           page: () => const HomeScreen(),
           binding: MainBindings(),
         ),
+        GetPage(
+          name: formCashFlowRoute,
+          page: () => const FormScreen(),
+          binding: MainBindings(),
+        )
       ],
     );
   }

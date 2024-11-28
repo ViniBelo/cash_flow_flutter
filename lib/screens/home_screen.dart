@@ -1,5 +1,7 @@
-import 'package:cash_flow/screens/list_screen.dart';
+import 'package:cash_flow/screens/cash_flow/list_screen.dart';
 import 'package:flutter/material.dart';
+
+import '../config/routes.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -11,7 +13,16 @@ class HomeScreen extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text("Cash Flow"),
       ),
-      body: Center(
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () {
+          Navigator.pushNamed(
+              context,
+              formCashFlowRoute
+          );
+        }
+      ),
+      body: const Center(
         child: ListScreen(),
       ),
     );
