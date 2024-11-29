@@ -9,6 +9,8 @@ class FormScreen extends GetView<DbController> {
 
   final TextEditingController amountController = TextEditingController();
   final TextEditingController typeController = TextEditingController();
+  final TextEditingController sourceController = TextEditingController();
+  final TextEditingController dateController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +33,41 @@ class FormScreen extends GetView<DbController> {
             MyDropdownMenu(
               dropDownMenuEntries: const ['Credit', 'Debit'],
               controller: typeController,
+            ),
+            MyDropdownMenu(
+              dropDownMenuEntries: (typeController.text.toString() == 'Credit')
+                  ? const ['Salary', 'Extras']
+                  : const ['Housing', 'Food', 'Health', 'Transport'],
+              controller: sourceController,
+            ),
+            MyTextFormField(
+              controller: dateController,
+              textInputType: TextInputType.datetime,
+              prefixIcon: const Icon(
+                Icons.calendar_month,
+                size: 32,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(14.0),
+              child: OutlinedButton(
+                onPressed: () {},
+                child: const Padding(
+                  padding: EdgeInsets.all(12.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.save),
+                      Text(
+                        "Save",
+                        style: TextStyle(
+                          fontSize: 24,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ),
             ),
           ],
         ),

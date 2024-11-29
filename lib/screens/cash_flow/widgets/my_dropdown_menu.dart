@@ -13,7 +13,7 @@ class MyDropdownMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(14.0),
+      padding: const EdgeInsets.only(top: 14, left: 14, right: 14),
       child: DropdownMenu<String>(
         controller: controller,
         initialSelection: dropDownMenuEntries.first,
