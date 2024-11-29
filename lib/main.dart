@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
         ),
         GetPage(
           name: formCashFlowRoute,
-          page: () => const FormScreen(),
+          page: () => FormScreen(),
           binding: MainBindings(),
         )
       ],
