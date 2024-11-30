@@ -1,8 +1,7 @@
 import 'package:cash_flow/controllers/db_controller.dart';
-import 'package:cash_flow/screens/cash_flow/widgets/my_dropdown_menu.dart';
-import 'package:cash_flow/screens/cash_flow/widgets/my_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:cash_flow/models/cash_flow.dart' as model;
 
 import 'form_fields_widget.dart';
 
@@ -34,7 +33,17 @@ class FormScreen extends GetView<DbController> {
             Padding(
               padding: const EdgeInsets.all(14.0),
               child: OutlinedButton(
-                onPressed: () {},
+                onPressed: () {
+                    controller.insertCashFlow(
+                          cashFlow: model.CashFlow(
+                            amount: double.parse(amountController.text),
+                            type: typeController.text,
+                            source: sourceController.text,
+                            expirationDate: DateTime.parse(dateController.text),
+                          ),
+                        );
+                  Navigator.pop(context);
+                },
                 child: const Padding(
                   padding: EdgeInsets.all(12.0),
                   child: Row(
@@ -49,7 +58,7 @@ class FormScreen extends GetView<DbController> {
                       ),
                     ],
                   ),
-                )
+                ),
               ),
             ),
           ],

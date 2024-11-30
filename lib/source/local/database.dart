@@ -8,7 +8,6 @@ class CashFlow extends Table {
   TextColumn get type => text()();
   TextColumn get source => text()();
   DateTimeColumn get expirationDate => dateTime()();
-  BoolColumn get isPaid => boolean()();
 }
 
 @DriftDatabase(tables: [CashFlow])

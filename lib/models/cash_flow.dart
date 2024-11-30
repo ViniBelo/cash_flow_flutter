@@ -10,7 +10,6 @@ class CashFlow {
     this.type,
     this.source,
     this.expirationDate,
-    this.isPaid
   });
 
   factory CashFlow.fromJson(Map<String, dynamic> json) =>
@@ -20,7 +19,6 @@ class CashFlow {
   final String? type;
   final String? source;
   final DateTime? expirationDate;
-  final bool? isPaid;
 
   Map<String, dynamic> toJson() => _$CashFlowToJson(this);
 }

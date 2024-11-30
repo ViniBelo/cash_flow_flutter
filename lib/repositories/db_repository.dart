@@ -19,7 +19,6 @@ class DbRepositoryImpl implements DbRepository {
         type: cashFlow?.type ?? "",
         source: cashFlow?.source ?? "",
         expirationDate: cashFlow?.expirationDate ?? DateTime.now(),
-        isPaid: cashFlow?.isPaid ?? true
       ),
     );
   }

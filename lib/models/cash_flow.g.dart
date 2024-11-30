@@ -13,7 +13,6 @@ CashFlow _$CashFlowFromJson(Map<String, dynamic> json) => CashFlow(
       expirationDate: json['expirationDate'] == null
           ? null
           : DateTime.parse(json['expirationDate'] as String),
-      isPaid: json['isPaid'] as bool?,
     );
 
 Map<String, dynamic> _$CashFlowToJson(CashFlow instance) => <String, dynamic>{
@@ -21,5 +20,4 @@ Map<String, dynamic> _$CashFlowToJson(CashFlow instance) => <String, dynamic>{
       'type': instance.type,
       'source': instance.source,
       'expirationDate': instance.expirationDate?.toIso8601String(),
-      'isPaid': instance.isPaid,
     };

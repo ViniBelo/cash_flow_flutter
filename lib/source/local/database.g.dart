@@ -30,17 +30,8 @@ class $CashFlowTable extends CashFlow
   late final GeneratedColumn<DateTime> expirationDate =
       GeneratedColumn<DateTime>('expiration_date', aliasedName, false,
           type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  static const VerificationMeta _isPaidMeta = const VerificationMeta('isPaid');
   @override
-  late final GeneratedColumn<bool> isPaid = GeneratedColumn<bool>(
-      'is_paid', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: true,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('CHECK ("is_paid" IN (0, 1))'));
-  @override
-  List<GeneratedColumn> get $columns =>
-      [amount, type, source, expirationDate, isPaid];
+  List<GeneratedColumn> get $columns => [amount, type, source, expirationDate];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -77,12 +68,6 @@ class $CashFlowTable extends CashFlow
     } else if (isInserting) {
       context.missing(_expirationDateMeta);
     }
-    if (data.containsKey('is_paid')) {
-      context.handle(_isPaidMeta,
-          isPaid.isAcceptableOrUnknown(data['is_paid']!, _isPaidMeta));
-    } else if (isInserting) {
-      context.missing(_isPaidMeta);
-    }
     return context;
   }
 
@@ -100,8 +85,6 @@ class $CashFlowTable extends CashFlow
           .read(DriftSqlType.string, data['${effectivePrefix}source'])!,
       expirationDate: attachedDatabase.typeMapping.read(
           DriftSqlType.dateTime, data['${effectivePrefix}expiration_date'])!,
-      isPaid: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}is_paid'])!,
     );
   }
 
@@ -116,13 +99,11 @@ class CashFlowData extends DataClass implements Insertable<CashFlowData> {
   final String type;
   final String source;
   final DateTime expirationDate;
-  final bool isPaid;
   const CashFlowData(
       {required this.amount,
       required this.type,
       required this.source,
-      required this.expirationDate,
-      required this.isPaid});
+      required this.expirationDate});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -130,7 +111,6 @@ class CashFlowData extends DataClass implements Insertable<CashFlowData> {
     map['type'] = Variable<String>(type);
     map['source'] = Variable<String>(source);
     map['expiration_date'] = Variable<DateTime>(expirationDate);
-    map['is_paid'] = Variable<bool>(isPaid);
     return map;
   }
 
@@ -140,7 +120,6 @@ class CashFlowData extends DataClass implements Insertable<CashFlowData> {
       type: Value(type),
       source: Value(source),
       expirationDate: Value(expirationDate),
-      isPaid: Value(isPaid),
     );
   }
 
@@ -152,7 +131,6 @@ class CashFlowData extends DataClass implements Insertable<CashFlowData> {
       type: serializer.fromJson<String>(json['type']),
       source: serializer.fromJson<String>(json['source']),
       expirationDate: serializer.fromJson<DateTime>(json['expirationDate']),
-      isPaid: serializer.fromJson<bool>(json['isPaid']),
     );
   }
   @override
@@ -163,7 +141,6 @@ class CashFlowData extends DataClass implements Insertable<CashFlowData> {
       'type': serializer.toJson<String>(type),
       'source': serializer.toJson<String>(source),
       'expirationDate': serializer.toJson<DateTime>(expirationDate),
-      'isPaid': serializer.toJson<bool>(isPaid),
     };
   }
 
@@ -171,14 +148,12 @@ class CashFlowData extends DataClass implements Insertable<CashFlowData> {
           {double? amount,
           String? type,
           String? source,
-          DateTime? expirationDate,
-          bool? isPaid}) =>
+          DateTime? expirationDate}) =>
       CashFlowData(
         amount: amount ?? this.amount,
         type: type ?? this.type,
         source: source ?? this.source,
         expirationDate: expirationDate ?? this.expirationDate,
-        isPaid: isPaid ?? this.isPaid,
       );
   CashFlowData copyWithCompanion(CashFlowCompanion data) {
     return CashFlowData(
@@ -188,7 +163,6 @@ class CashFlowData extends DataClass implements Insertable<CashFlowData> {
       expirationDate: data.expirationDate.present
           ? data.expirationDate.value
           : this.expirationDate,
-      isPaid: data.isPaid.present ? data.isPaid.value : this.isPaid,
     );
   }
 
@@ -198,14 +172,13 @@ class CashFlowData extends DataClass implements Insertable<CashFlowData> {
           ..write('amount: $amount, ')
           ..write('type: $type, ')
           ..write('source: $source, ')
-          ..write('expirationDate: $expirationDate, ')
-          ..write('isPaid: $isPaid')
+          ..write('expirationDate: $expirationDate')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(amount, type, source, expirationDate, isPaid);
+  int get hashCode => Object.hash(amount, type, source, expirationDate);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -213,8 +186,7 @@ class CashFlowData extends DataClass implements Insertable<CashFlowData> {
           other.amount == this.amount &&
           other.type == this.type &&
           other.source == this.source &&
-          other.expirationDate == this.expirationDate &&
-          other.isPaid == this.isPaid);
+          other.expirationDate == this.expirationDate);
 }
 
 class CashFlowCompanion extends UpdateCompanion<CashFlowData> {
@@ -222,14 +194,12 @@ class CashFlowCompanion extends UpdateCompanion<CashFlowData> {
   final Value<String> type;
   final Value<String> source;
   final Value<DateTime> expirationDate;
-  final Value<bool> isPaid;
   final Value<int> rowid;
   const CashFlowCompanion({
     this.amount = const Value.absent(),
     this.type = const Value.absent(),
     this.source = const Value.absent(),
     this.expirationDate = const Value.absent(),
-    this.isPaid = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   CashFlowCompanion.insert({
@@ -237,19 +207,16 @@ class CashFlowCompanion extends UpdateCompanion<CashFlowData> {
     required String type,
     required String source,
     required DateTime expirationDate,
-    required bool isPaid,
     this.rowid = const Value.absent(),
   })  : amount = Value(amount),
         type = Value(type),
         source = Value(source),
-        expirationDate = Value(expirationDate),
-        isPaid = Value(isPaid);
+        expirationDate = Value(expirationDate);
   static Insertable<CashFlowData> custom({
     Expression<double>? amount,
     Expression<String>? type,
     Expression<String>? source,
     Expression<DateTime>? expirationDate,
-    Expression<bool>? isPaid,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -257,7 +224,6 @@ class CashFlowCompanion extends UpdateCompanion<CashFlowData> {
       if (type != null) 'type': type,
       if (source != null) 'source': source,
       if (expirationDate != null) 'expiration_date': expirationDate,
-      if (isPaid != null) 'is_paid': isPaid,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -267,14 +233,12 @@ class CashFlowCompanion extends UpdateCompanion<CashFlowData> {
       Value<String>? type,
       Value<String>? source,
       Value<DateTime>? expirationDate,
-      Value<bool>? isPaid,
       Value<int>? rowid}) {
     return CashFlowCompanion(
       amount: amount ?? this.amount,
       type: type ?? this.type,
       source: source ?? this.source,
       expirationDate: expirationDate ?? this.expirationDate,
-      isPaid: isPaid ?? this.isPaid,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -294,9 +258,6 @@ class CashFlowCompanion extends UpdateCompanion<CashFlowData> {
     if (expirationDate.present) {
       map['expiration_date'] = Variable<DateTime>(expirationDate.value);
     }
-    if (isPaid.present) {
-      map['is_paid'] = Variable<bool>(isPaid.value);
-    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -310,7 +271,6 @@ class CashFlowCompanion extends UpdateCompanion<CashFlowData> {
           ..write('type: $type, ')
           ..write('source: $source, ')
           ..write('expirationDate: $expirationDate, ')
-          ..write('isPaid: $isPaid, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -333,7 +293,6 @@ typedef $$CashFlowTableCreateCompanionBuilder = CashFlowCompanion Function({
   required String type,
   required String source,
   required DateTime expirationDate,
-  required bool isPaid,
   Value<int> rowid,
 });
 typedef $$CashFlowTableUpdateCompanionBuilder = CashFlowCompanion Function({
@@ -341,7 +300,6 @@ typedef $$CashFlowTableUpdateCompanionBuilder = CashFlowCompanion Function({
   Value<String> type,
   Value<String> source,
   Value<DateTime> expirationDate,
-  Value<bool> isPaid,
   Value<int> rowid,
 });
 
@@ -366,9 +324,6 @@ class $$CashFlowTableFilterComposer
   ColumnFilters<DateTime> get expirationDate => $composableBuilder(
       column: $table.expirationDate,
       builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<bool> get isPaid => $composableBuilder(
-      column: $table.isPaid, builder: (column) => ColumnFilters(column));
 }
 
 class $$CashFlowTableOrderingComposer
@@ -392,9 +347,6 @@ class $$CashFlowTableOrderingComposer
   ColumnOrderings<DateTime> get expirationDate => $composableBuilder(
       column: $table.expirationDate,
       builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<bool> get isPaid => $composableBuilder(
-      column: $table.isPaid, builder: (column) => ColumnOrderings(column));
 }
 
 class $$CashFlowTableAnnotationComposer
@@ -417,9 +369,6 @@ class $$CashFlowTableAnnotationComposer
 
   GeneratedColumn<DateTime> get expirationDate => $composableBuilder(
       column: $table.expirationDate, builder: (column) => column);
-
-  GeneratedColumn<bool> get isPaid =>
-      $composableBuilder(column: $table.isPaid, builder: (column) => column);
 }
 
 class $$CashFlowTableTableManager extends RootTableManager<
@@ -449,7 +398,6 @@ class $$CashFlowTableTableManager extends RootTableManager<
             Value<String> type = const Value.absent(),
             Value<String> source = const Value.absent(),
             Value<DateTime> expirationDate = const Value.absent(),
-            Value<bool> isPaid = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
               CashFlowCompanion(
@@ -457,7 +405,6 @@ class $$CashFlowTableTableManager extends RootTableManager<
             type: type,
             source: source,
             expirationDate: expirationDate,
-            isPaid: isPaid,
             rowid: rowid,
           ),
           createCompanionCallback: ({
@@ -465,7 +412,6 @@ class $$CashFlowTableTableManager extends RootTableManager<
             required String type,
             required String source,
             required DateTime expirationDate,
-            required bool isPaid,
             Value<int> rowid = const Value.absent(),
           }) =>
               CashFlowCompanion.insert(
@@ -473,7 +419,6 @@ class $$CashFlowTableTableManager extends RootTableManager<
             type: type,
             source: source,
             expirationDate: expirationDate,
-            isPaid: isPaid,
             rowid: rowid,
           ),
           withReferenceMapper: (p0) => p0
