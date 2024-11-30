@@ -4,6 +4,8 @@ import 'package:cash_flow/screens/cash_flow/widgets/my_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'form_fields_widget.dart';
+
 class FormScreen extends GetView<DbController> {
   FormScreen({super.key});
 
@@ -21,32 +23,13 @@ class FormScreen extends GetView<DbController> {
       ),
       body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            MyTextFormField(
-              controller: amountController,
-              textInputType: TextInputType.number,
-              prefixIcon: const Icon(
-                Icons.attach_money,
-                size: 32,
-              ),
-            ),
-            MyDropdownMenu(
-              dropDownMenuEntries: const ['Credit', 'Debit'],
-              controller: typeController,
-            ),
-            MyDropdownMenu(
-              dropDownMenuEntries: (typeController.text.toString() == 'Credit')
-                  ? const ['Salary', 'Extras']
-                  : const ['Housing', 'Food', 'Health', 'Transport'],
-              controller: sourceController,
-            ),
-            MyTextFormField(
-              controller: dateController,
-              textInputType: TextInputType.datetime,
-              prefixIcon: const Icon(
-                Icons.calendar_month,
-                size: 32,
-              ),
+            FormFieldsWidget(
+              amountController: amountController,
+              typeController: typeController,
+              sourceController: sourceController,
+              dateController: dateController,
             ),
             Padding(
               padding: const EdgeInsets.all(14.0),

@@ -1,6 +1,6 @@
 import 'package:cash_flow/bindings/main_bindings.dart';
 import 'package:cash_flow/config/routes.dart';
-import 'package:cash_flow/screens/cash_flow/form_screen.dart';
+import 'package:cash_flow/screens/cash_flow/form/form_screen.dart';
 import 'package:cash_flow/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
