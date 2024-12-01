@@ -17,8 +17,8 @@ class HomeScreen extends StatelessWidget {
         child: const Icon(Icons.add),
         onPressed: () {
           Navigator.pushNamed(
-              context,
-              formCashFlowRoute
+            context,
+            formCashFlowRoute
           );
         }
       ),
