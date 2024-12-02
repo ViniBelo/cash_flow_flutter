@@ -42,7 +42,6 @@ class FormScreen extends GetView<DbController> {
                             expirationDate: DateTime.parse(dateController.text),
                           ),
                         );
-                  controller.getCashFlows();
                   Get.back();
                 },
                 child: const Padding(

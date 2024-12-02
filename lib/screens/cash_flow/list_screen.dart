@@ -25,11 +25,12 @@ class ListScreen extends GetView<DbController> {
             style: TextStyle(fontSize: size),
           ),
           subtitle: Text(
-            cashFlow.amount.toString(),
+            "\$${cashFlow.amount.toStringAsFixed(2)}",
             style: TextStyle(fontSize: size),
           ),
         ),
       ).toList() ?? [];
+      controller.getCashFlows();
       return ListView.separated(
           itemBuilder: (context, index) => listCashFlows[index],
           separatorBuilder: (context, index) => const Divider(
