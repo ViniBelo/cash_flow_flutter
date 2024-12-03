@@ -6,6 +6,7 @@ part 'cash_flow.g.dart';
 @JsonSerializable()
 class CashFlow {
   const CashFlow({
+    this.id,
     this.amount,
     this.type,
     this.source,
@@ -15,6 +16,7 @@ class CashFlow {
   factory CashFlow.fromJson(Map<String, dynamic> json) =>
       _$CashFlowFromJson(json);
 
+  final String? id;
   final double? amount;
   final String? type;
   final String? source;

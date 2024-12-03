@@ -4,6 +4,7 @@ import 'package:drift_flutter/drift_flutter.dart';
 part 'database.g.dart';
 
 class CashFlow extends Table {
+  TextColumn get id => text()();
   RealColumn get amount => real()();
   TextColumn get type => text()();
   TextColumn get source => text()();

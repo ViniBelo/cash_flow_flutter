@@ -26,4 +26,8 @@ class DbController extends GetxController with StateMixin<List<CashFlowData>> {
   Future<int> insertCashFlow({model.CashFlow? cashFlow}) {
     return repository.insertCashFlow(cashFlow: cashFlow);
   }
+
+  Future<int> deleteCashFlow({required String id}) {
+    return repository.deleteCashFlow(id: id);
+  }
 }

@@ -9,6 +9,11 @@ class $CashFlowTable extends CashFlow
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $CashFlowTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+      'id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _amountMeta = const VerificationMeta('amount');
   @override
   late final GeneratedColumn<double> amount = GeneratedColumn<double>(
@@ -31,7 +36,8 @@ class $CashFlowTable extends CashFlow
       GeneratedColumn<DateTime>('expiration_date', aliasedName, false,
           type: DriftSqlType.dateTime, requiredDuringInsert: true);
   @override
-  List<GeneratedColumn> get $columns => [amount, type, source, expirationDate];
+  List<GeneratedColumn> get $columns =>
+      [id, amount, type, source, expirationDate];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -42,6 +48,11 @@ class $CashFlowTable extends CashFlow
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
     if (data.containsKey('amount')) {
       context.handle(_amountMeta,
           amount.isAcceptableOrUnknown(data['amount']!, _amountMeta));
@@ -77,6 +88,8 @@ class $CashFlowTable extends CashFlow
   CashFlowData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return CashFlowData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
       amount: attachedDatabase.typeMapping
           .read(DriftSqlType.double, data['${effectivePrefix}amount'])!,
       type: attachedDatabase.typeMapping
@@ -95,18 +108,21 @@ class $CashFlowTable extends CashFlow
 }
 
 class CashFlowData extends DataClass implements Insertable<CashFlowData> {
+  final String id;
   final double amount;
   final String type;
   final String source;
   final DateTime expirationDate;
   const CashFlowData(
-      {required this.amount,
+      {required this.id,
+      required this.amount,
       required this.type,
       required this.source,
       required this.expirationDate});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
     map['amount'] = Variable<double>(amount);
     map['type'] = Variable<String>(type);
     map['source'] = Variable<String>(source);
@@ -116,6 +132,7 @@ class CashFlowData extends DataClass implements Insertable<CashFlowData> {
 
   CashFlowCompanion toCompanion(bool nullToAbsent) {
     return CashFlowCompanion(
+      id: Value(id),
       amount: Value(amount),
       type: Value(type),
       source: Value(source),
@@ -127,6 +144,7 @@ class CashFlowData extends DataClass implements Insertable<CashFlowData> {
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return CashFlowData(
+      id: serializer.fromJson<String>(json['id']),
       amount: serializer.fromJson<double>(json['amount']),
       type: serializer.fromJson<String>(json['type']),
       source: serializer.fromJson<String>(json['source']),
@@ -137,6 +155,7 @@ class CashFlowData extends DataClass implements Insertable<CashFlowData> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
       'amount': serializer.toJson<double>(amount),
       'type': serializer.toJson<String>(type),
       'source': serializer.toJson<String>(source),
@@ -145,11 +164,13 @@ class CashFlowData extends DataClass implements Insertable<CashFlowData> {
   }
 
   CashFlowData copyWith(
-          {double? amount,
+          {String? id,
+          double? amount,
           String? type,
           String? source,
           DateTime? expirationDate}) =>
       CashFlowData(
+        id: id ?? this.id,
         amount: amount ?? this.amount,
         type: type ?? this.type,
         source: source ?? this.source,
@@ -157,6 +178,7 @@ class CashFlowData extends DataClass implements Insertable<CashFlowData> {
       );
   CashFlowData copyWithCompanion(CashFlowCompanion data) {
     return CashFlowData(
+      id: data.id.present ? data.id.value : this.id,
       amount: data.amount.present ? data.amount.value : this.amount,
       type: data.type.present ? data.type.value : this.type,
       source: data.source.present ? data.source.value : this.source,
@@ -169,6 +191,7 @@ class CashFlowData extends DataClass implements Insertable<CashFlowData> {
   @override
   String toString() {
     return (StringBuffer('CashFlowData(')
+          ..write('id: $id, ')
           ..write('amount: $amount, ')
           ..write('type: $type, ')
           ..write('source: $source, ')
@@ -178,11 +201,12 @@ class CashFlowData extends DataClass implements Insertable<CashFlowData> {
   }
 
   @override
-  int get hashCode => Object.hash(amount, type, source, expirationDate);
+  int get hashCode => Object.hash(id, amount, type, source, expirationDate);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is CashFlowData &&
+          other.id == this.id &&
           other.amount == this.amount &&
           other.type == this.type &&
           other.source == this.source &&
@@ -190,12 +214,14 @@ class CashFlowData extends DataClass implements Insertable<CashFlowData> {
 }
 
 class CashFlowCompanion extends UpdateCompanion<CashFlowData> {
+  final Value<String> id;
   final Value<double> amount;
   final Value<String> type;
   final Value<String> source;
   final Value<DateTime> expirationDate;
   final Value<int> rowid;
   const CashFlowCompanion({
+    this.id = const Value.absent(),
     this.amount = const Value.absent(),
     this.type = const Value.absent(),
     this.source = const Value.absent(),
@@ -203,16 +229,19 @@ class CashFlowCompanion extends UpdateCompanion<CashFlowData> {
     this.rowid = const Value.absent(),
   });
   CashFlowCompanion.insert({
+    required String id,
     required double amount,
     required String type,
     required String source,
     required DateTime expirationDate,
     this.rowid = const Value.absent(),
-  })  : amount = Value(amount),
+  })  : id = Value(id),
+        amount = Value(amount),
         type = Value(type),
         source = Value(source),
         expirationDate = Value(expirationDate);
   static Insertable<CashFlowData> custom({
+    Expression<String>? id,
     Expression<double>? amount,
     Expression<String>? type,
     Expression<String>? source,
@@ -220,6 +249,7 @@ class CashFlowCompanion extends UpdateCompanion<CashFlowData> {
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
+      if (id != null) 'id': id,
       if (amount != null) 'amount': amount,
       if (type != null) 'type': type,
       if (source != null) 'source': source,
@@ -229,12 +259,14 @@ class CashFlowCompanion extends UpdateCompanion<CashFlowData> {
   }
 
   CashFlowCompanion copyWith(
-      {Value<double>? amount,
+      {Value<String>? id,
+      Value<double>? amount,
       Value<String>? type,
       Value<String>? source,
       Value<DateTime>? expirationDate,
       Value<int>? rowid}) {
     return CashFlowCompanion(
+      id: id ?? this.id,
       amount: amount ?? this.amount,
       type: type ?? this.type,
       source: source ?? this.source,
@@ -246,6 +278,9 @@ class CashFlowCompanion extends UpdateCompanion<CashFlowData> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
     if (amount.present) {
       map['amount'] = Variable<double>(amount.value);
     }
@@ -267,6 +302,7 @@ class CashFlowCompanion extends UpdateCompanion<CashFlowData> {
   @override
   String toString() {
     return (StringBuffer('CashFlowCompanion(')
+          ..write('id: $id, ')
           ..write('amount: $amount, ')
           ..write('type: $type, ')
           ..write('source: $source, ')
@@ -289,6 +325,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
 }
 
 typedef $$CashFlowTableCreateCompanionBuilder = CashFlowCompanion Function({
+  required String id,
   required double amount,
   required String type,
   required String source,
@@ -296,6 +333,7 @@ typedef $$CashFlowTableCreateCompanionBuilder = CashFlowCompanion Function({
   Value<int> rowid,
 });
 typedef $$CashFlowTableUpdateCompanionBuilder = CashFlowCompanion Function({
+  Value<String> id,
   Value<double> amount,
   Value<String> type,
   Value<String> source,
@@ -312,6 +350,9 @@ class $$CashFlowTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnFilters<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
   ColumnFilters<double> get amount => $composableBuilder(
       column: $table.amount, builder: (column) => ColumnFilters(column));
 
@@ -335,6 +376,9 @@ class $$CashFlowTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnOrderings<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<double> get amount => $composableBuilder(
       column: $table.amount, builder: (column) => ColumnOrderings(column));
 
@@ -358,6 +402,9 @@ class $$CashFlowTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
   GeneratedColumn<double> get amount =>
       $composableBuilder(column: $table.amount, builder: (column) => column);
 
@@ -394,6 +441,7 @@ class $$CashFlowTableTableManager extends RootTableManager<
           createComputedFieldComposer: () =>
               $$CashFlowTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
             Value<double> amount = const Value.absent(),
             Value<String> type = const Value.absent(),
             Value<String> source = const Value.absent(),
@@ -401,6 +449,7 @@ class $$CashFlowTableTableManager extends RootTableManager<
             Value<int> rowid = const Value.absent(),
           }) =>
               CashFlowCompanion(
+            id: id,
             amount: amount,
             type: type,
             source: source,
@@ -408,6 +457,7 @@ class $$CashFlowTableTableManager extends RootTableManager<
             rowid: rowid,
           ),
           createCompanionCallback: ({
+            required String id,
             required double amount,
             required String type,
             required String source,
@@ -415,6 +465,7 @@ class $$CashFlowTableTableManager extends RootTableManager<
             Value<int> rowid = const Value.absent(),
           }) =>
               CashFlowCompanion.insert(
+            id: id,
             amount: amount,
             type: type,
             source: source,

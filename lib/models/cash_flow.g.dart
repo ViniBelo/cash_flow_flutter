@@ -7,6 +7,7 @@ part of 'cash_flow.dart';
 // **************************************************************************
 
 CashFlow _$CashFlowFromJson(Map<String, dynamic> json) => CashFlow(
+      id: json['id'] as String?,
       amount: (json['amount'] as num?)?.toDouble(),
       type: json['type'] as String?,
       source: json['source'] as String?,
@@ -16,6 +17,7 @@ CashFlow _$CashFlowFromJson(Map<String, dynamic> json) => CashFlow(
     );
 
 Map<String, dynamic> _$CashFlowToJson(CashFlow instance) => <String, dynamic>{
+      'id': instance.id,
       'amount': instance.amount,
       'type': instance.type,
       'source': instance.source,
