@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../widgets/my_dropdown_menu.dart';
 import '../widgets/my_text_form_field.dart';
@@ -32,6 +33,12 @@ class _FormFieldsWidgetState extends State<FormFieldsWidget> {
     });
   }
 
+  void setDate(DateTime? selectedDate) {
+    setState(() {
+      widget.dateController.text = DateFormat("dd/MM/yyyy").format(selectedDate!);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -57,6 +64,15 @@ class _FormFieldsWidgetState extends State<FormFieldsWidget> {
           controller: widget.sourceController,
         ),
         MyTextFormField(
+          onTap: () async {
+            DateTime? selectedDate = await showDatePicker(
+              context: context,
+              firstDate: DateTime(2000),
+              lastDate: DateTime(3000),
+            );
+            setDate(selectedDate);
+          },
+          readOnly: true,
           controller: widget.dateController,
           textInputType: TextInputType.datetime,
           prefixIcon: const Icon(

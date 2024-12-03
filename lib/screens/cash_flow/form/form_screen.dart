@@ -2,6 +2,7 @@ import 'package:cash_flow/controllers/db_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cash_flow/models/cash_flow.dart' as model;
+import 'package:intl/intl.dart';
 
 import 'form_fields_widget.dart';
 
@@ -39,7 +40,11 @@ class FormScreen extends GetView<DbController> {
                             amount: double.parse(amountController.text),
                             type: typeController.text,
                             source: sourceController.text,
-                            expirationDate: DateTime.parse(dateController.text),
+                            expirationDate: DateTime.parse(
+                              DateFormat('yyyy-MM-dd').format(
+                                DateFormat('dd/MM/yyyy').parse(dateController.text),
+                              ),
+                            ),
                           ),
                         );
                   Get.back();
