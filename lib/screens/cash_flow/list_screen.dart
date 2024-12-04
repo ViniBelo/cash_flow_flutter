@@ -1,3 +1,4 @@
+import 'package:cash_flow/controllers/api_controller.dart';
 import 'package:cash_flow/controllers/db_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -5,7 +6,9 @@ import 'package:intl/intl.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class ListScreen extends GetView<DbController> {
-  const ListScreen({super.key});
+  final ApiController apiController = Get.find<ApiController>();
+
+  ListScreen({super.key});
 
   deleteItem(String id) {
     controller.deleteCashFlow(id: id);
@@ -20,6 +23,7 @@ class ListScreen extends GetView<DbController> {
     return controller.obx(
           (cashFlows) {
         controller.getCashFlows();
+        final conversion = apiController.euroToDollar.value;
         return ListView.separated(
           itemBuilder: (context, index) {
             final cashFlow = cashFlows![index];
@@ -52,7 +56,8 @@ class ListScreen extends GetView<DbController> {
                   style: TextStyle(fontSize: size),
                 ),
                 subtitle: Text(
-                  "\$${cashFlow.amount.toStringAsFixed(2)}",
+                  "\$${cashFlow.amount.toStringAsFixed(2)} => "
+                      "€${(cashFlow.amount * conversion).toStringAsFixed(2)}",
                   style: TextStyle(fontSize: size),
                 ),
               ),

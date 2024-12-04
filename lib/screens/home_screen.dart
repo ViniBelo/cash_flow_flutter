@@ -22,7 +22,7 @@ class HomeScreen extends StatelessWidget {
           );
         }
       ),
-      body: const Center(
+      body: Center(
         child: ListScreen(),
       ),
     );
