@@ -1,9 +1,17 @@
-import 'package:get/get.dart';
 
-class ApiRepository extends GetConnect {
-  getEuroToDollar() async {
-    final euroToDollarConversion = await
-        get("https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/eur.json");
-    return euroToDollarConversion.body['eur']['usd'];
+import '../source/remote/api_client.dart';
+
+class ApiRepositoryImpl implements ApiRepository {
+  final ApiClient apiClient;
+
+  ApiRepositoryImpl({required this.apiClient});
+
+  @override
+  Future<double> getEuroToDollar() {
+    return apiClient.getEuroToDollar();
   }
+}
+
+abstract class ApiRepository {
+  Future<double> getEuroToDollar();
 }
