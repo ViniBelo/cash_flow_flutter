@@ -56,8 +56,8 @@ class ListScreen extends GetView<DbController> {
                   style: TextStyle(fontSize: size),
                 ),
                 subtitle: Text(
-                  "\$${cashFlow.amount.toStringAsFixed(2)} => "
-                      "€${(cashFlow.amount * conversion).toStringAsFixed(2)}",
+                  "${formatCurrency(cashFlow.amount, 'en_US', '\$')} => "
+                      "${formatCurrency(cashFlow.amount * conversion, 'en_EU', '€')}",
                   style: TextStyle(fontSize: size),
                 ),
               ),
@@ -70,5 +70,9 @@ class ListScreen extends GetView<DbController> {
       onError: (error) => Text(error.toString()),
       onLoading: const Center(child: CircularProgressIndicator()),
     );
+  }
+  String formatCurrency(double amount, String locale, String symbol) {
+    final format = NumberFormat.currency(locale: locale, symbol: symbol);
+    return format.format(amount);
   }
 }

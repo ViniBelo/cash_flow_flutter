@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 import '../widgets/my_dropdown_menu.dart';
@@ -45,6 +46,17 @@ class _FormFieldsWidgetState extends State<FormFieldsWidget> {
       children: [
         MyTextFormField(
           controller: widget.amountController,
+          inputFormatters: [
+            TextInputFormatter.withFunction((oldValue, newValue) {
+              final text = newValue.text;
+
+              if (!RegExp(r'^\d*\.?\d{0,2}$').hasMatch(text)) {
+                return oldValue;
+              }
+
+              return newValue;
+            }),
+          ],
           textInputType: TextInputType.number,
           prefixIcon: const Icon(
             Icons.attach_money,

@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 
 
 class DbController extends GetxController with StateMixin<List<CashFlowData>> {
-  DbController({required this.repository}){
+  DbController({required this.repository}) {
     change(null, status: RxStatus.empty());
   }
 

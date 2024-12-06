@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class MyTextFormField extends StatelessWidget {
   const MyTextFormField({
@@ -8,8 +9,10 @@ class MyTextFormField extends StatelessWidget {
     this.prefixIcon,
     this.readOnly = false,
     this.onTap,
+    this.inputFormatters,
   });
 
+  final List<TextInputFormatter>? inputFormatters;
   final TextEditingController controller;
   final TextInputType textInputType;
   final Icon? prefixIcon;
@@ -31,6 +34,7 @@ class MyTextFormField extends StatelessWidget {
         style: const TextStyle(
           fontSize: 24,
         ),
+        inputFormatters: inputFormatters,
         keyboardType: textInputType,
         maxLines: 1,
       ),
